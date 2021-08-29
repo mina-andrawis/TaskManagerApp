@@ -7,17 +7,17 @@ namespace Task.Library
 
         public string Name = null;
         public string Description = null;
-        public DateTime Date = new DateTime();
+        public DateTime Deadline = new DateTime();
         public bool isCompleted;
 
         public void addTask(string name, string desc, DateTime date, bool completed)
         {
             Name = name;
             Description = desc;
-            Date = date;
+            Deadline = date;
             isCompleted = completed;
 
-            Console.WriteLine(Name.ToString() + " " + Description.ToString()+ " " + Date + " " + isCompleted);
+            Console.WriteLine(Name.ToString() + " " + Description.ToString()+ " " + Deadline + " " + isCompleted);
         }
     }
 }
