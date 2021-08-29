@@ -10,14 +10,21 @@ namespace Task.Library
         public DateTime Deadline = new DateTime();
         public bool isCompleted;
 
-        public void addTask(string name, string desc, DateTime date, bool completed)
+        public Task addTask(string name, string desc, DateTime deadline, bool completed)
         {
-            Name = name;
-            Description = desc;
-            Deadline = date;
-            isCompleted = completed;
 
-            Console.WriteLine(Name.ToString() + " " + Description.ToString()+ " " + Deadline + " " + isCompleted);
+            Task newTask = new Task();
+
+            newTask.Name = name;
+            newTask.Description = desc;
+            newTask.Deadline = deadline;
+            newTask.isCompleted = completed;
+
+            return newTask;
+
+            //Console.WriteLine(Name.ToString() + " " + Description.ToString()+ " " + Deadline + " " + isCompleted);
         }
+
+
     }
 }
