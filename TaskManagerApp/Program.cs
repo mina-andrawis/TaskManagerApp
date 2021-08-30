@@ -69,11 +69,8 @@ namespace TaskManagerApp
                     // new Task object and insert it into the taskList
                     taskList.Add(new TaskLibrary.Task().addTask(name, desc, deadline, completed));
 
-                    foreach (var Task in taskList)
-                    {
-                        int i = 1;
-                        Console.WriteLine("{0}) {1}",i++,Task.Name);
-                    }
+                    new TaskLibrary.Task().listAllTasks(taskList);
+
                     break;
 
             }

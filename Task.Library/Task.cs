@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Task.Library
 {
@@ -22,7 +23,15 @@ namespace Task.Library
 
             return newTask;
 
-            //Console.WriteLine(Name.ToString() + " " + Description.ToString()+ " " + Deadline + " " + isCompleted);
+        }
+
+        public void listAllTasks(List<Task> taskList)
+        {
+            foreach (var Task in taskList)
+            {
+                int i = 1;
+                Console.WriteLine("{0}) {1}", i++, Task.Name);
+            }
         }
 
 
