@@ -11,7 +11,7 @@ namespace Task.Library
         public DateTime Deadline = new DateTime();
         public bool isCompleted;
 
-        public Task addTask(string name, string desc, DateTime deadline, bool completed)
+        public Task AddTask(string name, string desc, DateTime deadline, bool completed)
         {
 
             Task newTask = new Task();
@@ -25,7 +25,7 @@ namespace Task.Library
 
         }
 
-        public void listAllTasks(List<Task> taskList)
+        public void ListAllTasks(List<Task> taskList)
         {
             int i = 1;
 
@@ -33,9 +33,10 @@ namespace Task.Library
             {
                 Console.WriteLine("{0}) {1}", i++, Task.Name);
             }
+            Console.WriteLine("\n");
         }
 
-        public void listOutstanding(List<Task> taskList)
+        public void ListOutstanding(List<Task> taskList)
         {
             int i = 1;
 
@@ -46,11 +47,18 @@ namespace Task.Library
                     Console.WriteLine("{0}) {1}", i++, Task.Name);
                 }
             }
+            Console.WriteLine("\n");
+
         }
 
-        public void deleteTask()
+        public void Complete(Task task)
         {
+            task.isCompleted = true;
+        }
 
+        public void DeleteTask(List<Task> taskList,int position)
+        {
+            taskList.RemoveAt(position);
         }
     }
 }

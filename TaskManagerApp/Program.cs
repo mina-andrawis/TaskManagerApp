@@ -16,7 +16,8 @@ namespace TaskManagerApp
         static void Main(string[] args)
         {
 
-            string selection;
+            string selection="";
+            //int selectionInt = 0;  //transform into int, cases 3,4,5
 
             //do while to loop menu after each choice
             do
@@ -33,6 +34,7 @@ namespace TaskManagerApp
                     "      7) close task manager\n");
 
                 selection = Console.ReadLine();
+
 
                 //depending on the input of the user, do the thing
                 switch (selection)
@@ -63,27 +65,94 @@ namespace TaskManagerApp
                         }
                         catch (FormatException)
                         {
-                            Console.WriteLine("{0} is not in the correct format.", deadlineString);
+                            Console.WriteLine("{0} is not in the correct format. Returning to menu...", deadlineString);
+                            break;
                         }
 
                         // use method found in TaskLibrary in order to create a 
                         // new Task object and insert it into the taskList
-                        taskList.Add(new TaskLibrary.Task().addTask(name, desc, deadline, completed));
+                        taskList.Add(new TaskLibrary.Task().AddTask(name, desc, deadline, completed));
 
-                        new TaskLibrary.Task().listAllTasks(taskList);
+                        new TaskLibrary.Task().ListAllTasks(taskList);
 
                         break;
 
+                    // delete task
                     case "2":
 
                         Console.WriteLine("Which task would you like to delete? Please provide a number from your outstanding tasks.");
 
-                        new TaskLibrary.Task().listOutstanding(taskList);
+                        new TaskLibrary.Task().ListAllTasks(taskList);
 
+                        selection = Console.ReadLine();     //overwrite selection variable since we're alrady in case block
+
+
+                        try
+                        {
+                            int numVal = Int32.Parse(selection);
+
+                            new TaskLibrary.Task().DeleteTask(taskList, numVal - 1); 
+                            // -1 to account for the fact that the list shown to user skips 0
+
+
+                        }
+                        catch (FormatException e)
+                        {
+                            Console.WriteLine("You did not enter a numeric value or the selection was not found. Returning to menu...\n");
+                            break;
+                        }
+
+                        // incomplete
 
                         break;
+
+                    // edit task
+                    case "3":
+
+                        // incomplete
+
+                        break;
+                        
+                    // complete task
+                    case "4":
+                        Console.WriteLine("Which task would you like to complete? Please provide a number from your outstanding tasks.");
+
+                        new TaskLibrary.Task().ListOutstanding(taskList);
+
+                        selection = Console.ReadLine();     //overwrite selection variable since we're alrady in case block
+
+                        try
+                        {
+                            int numVal = Int32.Parse(selection);
+                            
+                            new TaskLibrary.Task().Complete(taskList[numVal-1]);
+                            // -1 to account for the fact that the list shown to user skips 0
+
+
+                        }
+                        catch (FormatException e)
+                        {
+                            Console.WriteLine("You did not enter a numeric value or the selection was not found. Returning to menu...\n");
+                            break;
+                        }
+
+                        break;
+
+                    // print outstanding tasks
+                    case "5":
+
+                        new TaskLibrary.Task().ListOutstanding(taskList);
+
+                        break;
+                    // print all tasks
+                    case "6":
+
+                        new TaskLibrary.Task().ListAllTasks(taskList);
+
+                        break;
+
                 }
-            } while (selection != "7");
+            } while (selection != "7");         //7 means exit application
 
         }
     }
