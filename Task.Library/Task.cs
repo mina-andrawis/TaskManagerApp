@@ -27,13 +27,30 @@ namespace Task.Library
 
         public void listAllTasks(List<Task> taskList)
         {
+            int i = 1;
+
             foreach (var Task in taskList)
             {
-                int i = 1;
                 Console.WriteLine("{0}) {1}", i++, Task.Name);
             }
         }
 
+        public void listOutstanding(List<Task> taskList)
+        {
+            int i = 1;
 
+            foreach (var Task in taskList)
+            {
+                if (!Task.isCompleted)
+                {
+                    Console.WriteLine("{0}) {1}", i++, Task.Name);
+                }
+            }
+        }
+
+        public void deleteTask()
+        {
+
+        }
     }
 }
