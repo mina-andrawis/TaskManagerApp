@@ -17,7 +17,6 @@ namespace TaskManagerApp
         {
 
             string selection="";
-            //int selectionInt = 0;  //transform into int, cases 3,4,5
 
             //do while to loop menu after each choice
             do
@@ -84,15 +83,62 @@ namespace TaskManagerApp
 
                         new TaskLibrary.Task().ListAllTasks(taskList);
 
-                        selection = Console.ReadLine();     //overwrite selection variable since we're alrady in case block
+                        string taskChoice = Console.ReadLine(); 
 
 
                         try
                         {
-                            int numVal = Int32.Parse(selection);
+                            int numVal = Int32.Parse(taskChoice);
 
                             new TaskLibrary.Task().DeleteTask(taskList, numVal - 1); 
                             // -1 to account for the fact that the list shown to user skips 0
+
+                        }
+                        catch (FormatException e)
+                        {
+                            Console.WriteLine("You did not enter a numeric value or the selection was not found. Returning to menu...\n");
+                            break;
+                        }
+
+                        break;
+
+                    // edit task
+                    case "3":
+
+                        Console.WriteLine("Which task would you like to edit? Please provide a number from your outstanding tasks.");
+
+                        new TaskLibrary.Task().ListAllTasks(taskList);
+                        taskChoice = Console.ReadLine();
+
+
+                        Console.WriteLine("Would you like to edit the title (t) or description (d) of the task?.");
+                        string editChoice = Console.ReadLine();    
+
+                        try
+                        {
+                            int numVal = Int32.Parse(taskChoice);
+
+                            string replacement;
+
+                            if (editChoice == "t")
+                            {
+                                Console.WriteLine("Would you like to replace the title with?");
+                                replacement = Console.ReadLine();    
+
+                                new TaskLibrary.Task().EditTitle(taskList, numVal - 1,replacement);
+                            }
+                            else if (editChoice == "d")
+                            {
+                                Console.WriteLine("Would you like to replace the description with?");
+                                replacement = Console.ReadLine();     
+
+                                new TaskLibrary.Task().EditDescription(taskList, numVal - 1, replacement);
+                            }
+                            else
+                            {
+                                Console.WriteLine("{0} is not a valid choice. Returning to menu...", selection);
+                                break;
+                            }
 
 
                         }
@@ -102,15 +148,7 @@ namespace TaskManagerApp
                             break;
                         }
 
-                        // incomplete
-
-                        break;
-
-                    // edit task
-                    case "3":
-
-                        // incomplete
-
+                        
                         break;
                         
                     // complete task
@@ -119,11 +157,11 @@ namespace TaskManagerApp
 
                         new TaskLibrary.Task().ListOutstanding(taskList);
 
-                        selection = Console.ReadLine();     //overwrite selection variable since we're alrady in case block
+                        taskChoice = Console.ReadLine();   
 
                         try
                         {
-                            int numVal = Int32.Parse(selection);
+                            int numVal = Int32.Parse(taskChoice);
                             
                             new TaskLibrary.Task().Complete(taskList[numVal-1]);
                             // -1 to account for the fact that the list shown to user skips 0
@@ -151,8 +189,14 @@ namespace TaskManagerApp
 
                         break;
 
+                    default:
+                        Console.WriteLine("Your selection, {0}, was not found. Returning to menu...\n", selection);
+                        break;
+
                 }
             } while (selection != "7");         //7 means exit application
+
+            Console.WriteLine("Thank you for using the application. Shutting down.. \n");
 
         }
     }
