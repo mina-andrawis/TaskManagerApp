@@ -12,7 +12,7 @@ namespace Task.Library
         public DateTime _deadline = new DateTime();
         public bool _isCompleted;
 
-        private static int currentId;
+        private static int currentId = 1;
 
         // properties
 
@@ -21,10 +21,17 @@ namespace Task.Library
         public string Description { get; set; }
         public DateTime Deadline { get; set; }
         public bool IsCompleted { get; set; }
+         
+        public Task()
+        {
+            Id = currentId++; 
+        }
 
         public Task AddTask(string name, string desc, DateTime deadline, bool completed)
         {
-            Id = currentId++;       //id is updated every time constructor is called
+            //Id = currentId++;       //id is updated every time constructor is called
+            //Console.WriteLine($" ID: {currentId}");
+
 
             Task newTask = new Task();
 

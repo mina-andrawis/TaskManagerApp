@@ -91,8 +91,7 @@ namespace TaskManagerApp
                             int numVal = Int32.Parse(taskChoice);
 
                             new TaskLibrary.Task().DeleteTask(taskList, numVal - 1); 
-                            // -1 to account for the fact that the list shown to user skips 0
-
+                            // -1 to account for the fact that Id starts at 1, not 0
                         }
                         catch (FormatException e)
                         {
@@ -125,7 +124,7 @@ namespace TaskManagerApp
                                 Console.WriteLine("Would you like to replace the title with?");
                                 replacement = Console.ReadLine();    
 
-                                new TaskLibrary.Task().EditTitle(taskList, numVal - 1,replacement);
+                                new TaskLibrary.Task().EditTitle(taskList, numVal - 1, replacement);
                             }
                             else if (editChoice == "d")
                             {
