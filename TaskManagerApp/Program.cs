@@ -75,7 +75,7 @@ namespace TaskManagerApp
                         // new Task object and insert it into the taskList
                         taskList.Add(new TaskLibrary.Task().AddTask(name, desc, deadline, completed));
 
-                        new TaskLibrary.Task().ListAllTasks(taskList);
+                        PrintTaskList(taskNavigator);
 
                         break;
 
@@ -84,7 +84,7 @@ namespace TaskManagerApp
 
                         Console.WriteLine("Which task would you like to delete? Please provide a number from your outstanding tasks.");
 
-                        new TaskLibrary.Task().ListAllTasks(taskList);
+                        PrintTaskList(taskNavigator);
 
                         string taskChoice = Console.ReadLine(); 
 
@@ -109,7 +109,7 @@ namespace TaskManagerApp
 
                         Console.WriteLine("Which task would you like to edit? Please provide a number from your outstanding tasks.");
 
-                        new TaskLibrary.Task().ListAllTasks(taskList);
+                        PrintTaskList(taskNavigator);
                         taskChoice = Console.ReadLine();
 
 
@@ -157,7 +157,7 @@ namespace TaskManagerApp
                     case "4":
                         Console.WriteLine("Which task would you like to complete? Please provide a number from your outstanding tasks.");
 
-                        new TaskLibrary.Task().ListOutstanding(taskList);
+                        PrintTaskList(taskNavigator, true);
 
                         taskChoice = Console.ReadLine();   
 
@@ -182,7 +182,7 @@ namespace TaskManagerApp
                     case "5":
 
 
-                        PrintTicketList(taskNavigator,true);
+                        PrintTaskList(taskNavigator,true);
 
                         //new TaskLibrary.Task().ListOutstanding(taskList);
 
@@ -191,7 +191,7 @@ namespace TaskManagerApp
                     case "6":
 
                         //new TaskLibrary.Task().ListAllTasks(taskList);
-                        PrintTicketList(taskNavigator);
+                        PrintTaskList(taskNavigator);
 
                         break;
 
@@ -208,16 +208,15 @@ namespace TaskManagerApp
             Console.WriteLine("Thank you for using the application. Shutting down.. \n");
 
         }
-        public static void PrintTicketList(ListNavigator<TaskLibrary.Task> taskNavigator, bool onlyOutstanding = false)
+        public static void PrintTaskList(ListNavigator<TaskLibrary.Task> taskNavigator, bool onlyOutstanding = false)
         {
-            //foreach (var ticket in ticketList)
-            //{
-            //    Console.WriteLine(ticket.ToString());
-            //}
+
             bool isNavigating = true;
             while (isNavigating)
             {
                 var page = taskNavigator.GetCurrentPage();
+                Console.WriteLine("\n");
+
                 foreach (var task in page)
                 {
 

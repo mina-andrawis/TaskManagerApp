@@ -54,38 +54,6 @@ namespace Task.Library
 
         }
 
-        public void ListAllTasks(List<Task> taskList)
-        {
-
-            Console.WriteLine("\n");
-            int id = 1;
-
-
-            foreach (var Task in taskList)
-            {
-                Console.WriteLine($"{id++}) {Task._name} // {Task._description}");
-            }
-            Console.WriteLine("\n");
-        }
-
-        public void ListOutstanding(List<Task> taskList)
-        {
-
-            Console.WriteLine("\n");
-            int id = 1;
-
-
-            foreach (var Task in taskList)
-            {
-                if (!Task._isCompleted)
-                {
-                    Console.WriteLine($"{id++}) {Task._name} // {Task._description}");
-
-                }
-            }
-            Console.WriteLine("\n");
-
-        }
 
         public void Complete(Task task)
         {
@@ -106,12 +74,12 @@ namespace Task.Library
 
         public void EditTitle(List<Task> taskList, int position, string replacement)
         {
-            taskList[position]._name = replacement;
+            taskList[position].Name = replacement;
         }
 
         public void EditDescription(List<Task> taskList, int position, string replacement)
         {
-            taskList[position]._description = replacement;
+            taskList[position].Description = replacement;
         }
 
         public override string ToString()
