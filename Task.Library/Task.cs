@@ -89,7 +89,7 @@ namespace Task.Library
 
         public void Complete(Task task)
         {
-            task._isCompleted = true;
+            task.IsCompleted = true;
         }
 
         public void DeleteTask(List<Task> taskList, int position)
@@ -116,7 +116,7 @@ namespace Task.Library
 
         public override string ToString()
         {
-            return $"{Id}. {Name} - {Description} Due: {Deadline}";
+            return $"{Id}. {Name} // {Description} Due: {Deadline}";
         }
     }
 }

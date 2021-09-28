@@ -181,7 +181,10 @@ namespace TaskManagerApp
                     // print outstanding tasks
                     case "5":
 
-                        new TaskLibrary.Task().ListOutstanding(taskList);
+
+                        PrintTicketList(taskNavigator,true);
+
+                        //new TaskLibrary.Task().ListOutstanding(taskList);
 
                         break;
                     // print all tasks
@@ -205,7 +208,7 @@ namespace TaskManagerApp
             Console.WriteLine("Thank you for using the application. Shutting down.. \n");
 
         }
-        public static void PrintTicketList(ListNavigator<TaskLibrary.Task> taskNavigator)
+        public static void PrintTicketList(ListNavigator<TaskLibrary.Task> taskNavigator, bool onlyOutstanding = false)
         {
             //foreach (var ticket in ticketList)
             //{
@@ -217,7 +220,18 @@ namespace TaskManagerApp
                 var page = taskNavigator.GetCurrentPage();
                 foreach (var task in page)
                 {
-                    Console.WriteLine($"{task.ToString()}");
+
+                    if (onlyOutstanding == true)        //only print outstanding
+                    {
+                        if (!task.Value.IsCompleted)
+                        {
+                            Console.WriteLine($"{task.Value}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{task.Value}");
+                    }
                 }
 
                 if (taskNavigator.HasPreviousPage)
