@@ -112,7 +112,7 @@ namespace TaskManagerApp
 
                         Console.WriteLine("Would you like to edit the title (t) or description (d) of the task?.");
                         string editChoice = Console.ReadLine();    
-
+                         
                         try
                         {
                             int numVal = Int32.Parse(taskChoice);
@@ -186,6 +186,9 @@ namespace TaskManagerApp
 
                         new TaskLibrary.Task().ListAllTasks(taskList);
 
+                        break;
+
+                    case "7":
                         break;
 
                     default:

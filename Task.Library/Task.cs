@@ -12,11 +12,21 @@ namespace Task.Library
         public DateTime _deadline = new DateTime();
         public bool _isCompleted;
 
-        private static int currentId = 1;
+        private static int currentId = 1;       //keep track of the amount of tasks
+        private int _id = -1;       //check if id is new
 
         // properties
-
-        public int Id { get; set; }
+        public int Id
+        {
+            get
+            {
+                if (_id <= 0)   // if the id is new, set the id to currentId
+                {
+                    _id = currentId++;
+                }
+                return _id;
+            }
+        }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Deadline { get; set; }
@@ -24,7 +34,7 @@ namespace Task.Library
          
         public Task()
         {
-            Id = currentId++; 
+
         }
 
         public Task AddTask(string name, string desc, DateTime deadline, bool completed)
@@ -48,10 +58,12 @@ namespace Task.Library
         {
 
             Console.WriteLine("\n");
+            int id = 0;
+
 
             foreach (var Task in taskList)
             {
-                Console.WriteLine($"{Id}) {Task._name} // {Task._description}");
+                Console.WriteLine($"{id++}) {Task._name} // {Task._description}");
             }
             Console.WriteLine("\n");
         }
@@ -60,12 +72,14 @@ namespace Task.Library
         {
 
             Console.WriteLine("\n");
+            int id = 0;
+
 
             foreach (var Task in taskList)
             {
                 if (!Task._isCompleted)
                 {
-                    Console.WriteLine($"{Id}) {Task._name} // {Task._description}");
+                    Console.WriteLine($"{id++}) {Task._name} // {Task._description}");
 
                 }
             }
