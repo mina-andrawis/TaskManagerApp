@@ -19,7 +19,7 @@ namespace TaskManagerApp
 
             string selection="";
 
-            var taskNavigator = new ListNavigator<TaskLibrary.Task>(taskList, 2);
+            var taskNavigator = new ListNavigator<TaskLibrary.Task>(taskList);
 
             //do while to loop menu after each choice
             do
