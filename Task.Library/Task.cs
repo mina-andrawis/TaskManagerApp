@@ -45,10 +45,10 @@ namespace Task.Library
 
             Task newTask = new Task();
 
-            newTask._name = name;
-            newTask._description = desc;
-            newTask._deadline = deadline;
-            newTask._isCompleted = completed;
+            newTask.Name = name;
+            newTask.Description = desc;
+            newTask.Deadline = deadline;
+            newTask.IsCompleted = completed;
 
             return newTask;
 
@@ -58,7 +58,7 @@ namespace Task.Library
         {
 
             Console.WriteLine("\n");
-            int id = 0;
+            int id = 1;
 
 
             foreach (var Task in taskList)
@@ -72,7 +72,7 @@ namespace Task.Library
         {
 
             Console.WriteLine("\n");
-            int id = 0;
+            int id = 1;
 
 
             foreach (var Task in taskList)
@@ -98,7 +98,7 @@ namespace Task.Library
             {
                 taskList.RemoveAt(position);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 Console.WriteLine("The selection was not found. Returning to menu...\n");
             }
@@ -112,6 +112,11 @@ namespace Task.Library
         public void EditDescription(List<Task> taskList, int position, string replacement)
         {
             taskList[position]._description = replacement;
+        }
+
+        public override string ToString()
+        {
+            return $"{Id}. {Name} - {Description} Due: {Deadline}";
         }
     }
 }

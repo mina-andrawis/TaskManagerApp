@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Collections.Generic;
 
 using TaskLibrary = Task.Library;
+using Task.Library;
 
 namespace TaskManagerApp
 {
@@ -17,6 +18,8 @@ namespace TaskManagerApp
         {
 
             string selection="";
+
+            var taskNavigator = new ListNavigator<TaskLibrary.Task>(taskList, 2);
 
             //do while to loop menu after each choice
             do
@@ -93,7 +96,7 @@ namespace TaskManagerApp
                             new TaskLibrary.Task().DeleteTask(taskList, numVal - 1); 
                             // -1 to account for the fact that Id starts at 1, not 0
                         }
-                        catch (FormatException e)
+                        catch (FormatException)
                         {
                             Console.WriteLine("You did not enter a numeric value or the selection was not found. Returning to menu...\n");
                             break;
@@ -141,7 +144,7 @@ namespace TaskManagerApp
 
 
                         }
-                        catch (FormatException e)
+                        catch (FormatException)
                         {
                             Console.WriteLine("You did not enter a numeric value or the selection was not found. Returning to menu...\n");
                             break;
@@ -167,7 +170,7 @@ namespace TaskManagerApp
 
 
                         }
-                        catch (FormatException e)
+                        catch (FormatException)
                         {
                             Console.WriteLine("You did not enter a numeric value or the selection was not found. Returning to menu...\n");
                             break;
@@ -184,7 +187,8 @@ namespace TaskManagerApp
                     // print all tasks
                     case "6":
 
-                        new TaskLibrary.Task().ListAllTasks(taskList);
+                        //new TaskLibrary.Task().ListAllTasks(taskList);
+                        PrintTicketList(taskNavigator);
 
                         break;
 
@@ -200,6 +204,49 @@ namespace TaskManagerApp
 
             Console.WriteLine("Thank you for using the application. Shutting down.. \n");
 
+        }
+        public static void PrintTicketList(ListNavigator<TaskLibrary.Task> taskNavigator)
+        {
+            //foreach (var ticket in ticketList)
+            //{
+            //    Console.WriteLine(ticket.ToString());
+            //}
+            bool isNavigating = true;
+            while (isNavigating)
+            {
+                var page = taskNavigator.GetCurrentPage();
+                foreach (var task in page)
+                {
+                    Console.WriteLine($"{task.ToString()}");
+                }
+
+                if (taskNavigator.HasPreviousPage)
+                {
+                    Console.WriteLine("P. Previous");
+                }
+
+                if (taskNavigator.HasNextPage)
+                {
+                    Console.WriteLine("N. Next");
+                }
+
+                var selection = Console.ReadLine();
+                if (selection.Equals("P", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    taskNavigator.GoBackward();
+                }
+                else if (selection.Equals("N", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    taskNavigator.GoForward();
+                }
+                else
+                {
+                    isNavigating = false;
+                }
+
+            }
+
+            Console.WriteLine();
         }
     }
 }
