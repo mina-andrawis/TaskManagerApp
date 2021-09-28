@@ -107,9 +107,10 @@ namespace TaskManagerApp
                     // edit task
                     case "3":
 
+                        PrintTaskList(taskNavigator);
+
                         Console.WriteLine("Which task would you like to edit? Please provide a number from your outstanding tasks.");
 
-                        PrintTaskList(taskNavigator);
                         taskChoice = Console.ReadLine();
 
 
@@ -127,7 +128,7 @@ namespace TaskManagerApp
                                 Console.WriteLine("Would you like to replace the title with?");
                                 replacement = Console.ReadLine();    
 
-                                new TaskLibrary.Task().EditTitle(taskList, numVal - 1, replacement);
+                                new TaskLibrary.Task().EditTitle(taskList, numVal-1, replacement);
                             }
                             else if (editChoice == "d")
                             {
