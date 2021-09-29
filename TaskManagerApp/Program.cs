@@ -82,9 +82,10 @@ namespace TaskManagerApp
                     // delete task
                     case "2":
 
+                        PrintTaskList(taskNavigator);
+
                         Console.WriteLine("Which task would you like to delete? Please provide a number from your outstanding tasks.");
 
-                        PrintTaskList(taskNavigator);
 
                         string taskChoice = Console.ReadLine(); 
 

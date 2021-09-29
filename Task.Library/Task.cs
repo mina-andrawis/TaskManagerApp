@@ -3,14 +3,9 @@ using System.Collections.Generic;
 
 namespace Task.Library
 {
-    public class Task
+    public class Task : ItemBase
     {
 
-        // fields
-        public string _name = null;
-        public string _description = null;
-        public DateTime _deadline = new DateTime();
-        public bool _isCompleted;
 
         private static int currentId = 1;       //keep track of the amount of tasks
         private int _id = -1;       //check if id is new
@@ -27,8 +22,8 @@ namespace Task.Library
                 return _id;
             }
         }
-        public string Name { get; set; }
-        public string Description { get; set; }
+
+        // { set; get;} automatically creates private fields , no need for declaring _deadline, _isCompleted
         public DateTime Deadline { get; set; }
         public bool IsCompleted { get; set; }
          

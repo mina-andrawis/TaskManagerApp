@@ -4,7 +4,14 @@ using System.Text;
 
 namespace Task.Library
 {
-    class Appointment
+    class Appointment : ItemBase
     {
+        public DateTime Start { set; get; }
+        public DateTime Stop { set; get; }
+        public List<String> Attendees { set; get; }
+        
+
+
+        
     }
 }
