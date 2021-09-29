@@ -12,14 +12,14 @@ namespace TaskManagerApp
     class Program
     {
         //list to organize the tasks
-        public static List<TaskLibrary.Task> taskList= new List<TaskLibrary.Task>();
+        public static List<TaskLibrary.ItemBase> taskList= new List<TaskLibrary.ItemBase>();
 
         static void Main(string[] args)
         {
 
             string selection="";
 
-            var taskNavigator = new ListNavigator<TaskLibrary.Task>(taskList);
+            var itemNavigator = new ListNavigator<TaskLibrary.ItemBase>(taskList);
 
             //do while to loop menu after each choice
             do
@@ -28,12 +28,13 @@ namespace TaskManagerApp
                 //present user with menu options
                 Console.WriteLine("Please select an option from the following menu:\n" +
                     "1) create task\n" +
-                    " 2) delete task\n" +
-                    "  3) edit existing task\n" +
-                    "   4) complete task\n" +
-                    "    5) list all outstanding tasks\n" +
-                    "     6) list all tasks\n" +
-                    "      7) close task manager\n");
+                    " 2) create appointment\n" +
+                    "  3) delete item\n" +
+                    "   4) edit existing item\n" +
+                    "    5) complete item\n" +
+                    "     6) list all outstanding items\n" +
+                    "      7) list all items\n" +
+                    "       8) close task manager\n");
 
                 selection = Console.ReadLine();
 
@@ -44,12 +45,12 @@ namespace TaskManagerApp
                     //create task
                     case "1":
 
-                        var name = " ";
+                        //used for both appointment and task
+                        var name = " ";     
                         var desc = " ";
 
                         var deadline = new DateTime(2000, 01, 01);    //placeholder date
-                        CultureInfo us = new CultureInfo("en-US");  //used to error check for USA date format
-                        string format = "d"; //error checking for deadline format (mm/dd/yyyy)
+
 
                         var completed = false;
 
@@ -60,29 +61,73 @@ namespace TaskManagerApp
                         Console.WriteLine("Provide the deadline date of this task (e.g. 04/12/2021). Click 'Enter' when complete.");
                         string deadlineString = Console.ReadLine();
 
-                        //parse user inputted date to check formatting
-                        try
+                        if (!DateTime.TryParse(deadlineString, out deadline))
                         {
-                            deadline = DateTime.ParseExact(deadlineString, format, us);
+                            Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", deadlineString);
+                            deadline = DateTime.Today.AddHours(12);
                         }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine("{0} is not in the correct format. Returning to menu...", deadlineString);
-                            break;
-                        }
+
 
                         // use method found in TaskLibrary in order to create a 
                         // new Task object and insert it into the taskList
                         taskList.Add(new TaskLibrary.Task().AddTask(name, desc, deadline, completed));
 
-                        PrintTaskList(taskNavigator);
+                        PrintTaskList(itemNavigator);
 
                         break;
 
-                    // delete task
+                    //create appointment
                     case "2":
 
-                        PrintTaskList(taskNavigator);
+                        //placeholder values        
+                        var startTime = new DateTime(2000, 01, 01);    
+                        var endTime = new DateTime(2000, 01, 01);    
+
+                        List<String> attendeeList = new List<String>();
+
+                        Console.WriteLine("What is the name of your appointment? Click 'Enter' when complete.");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Provide a description if you would like. Click 'Enter' when complete.");
+                        desc = Console.ReadLine();
+                        Console.WriteLine("Provide the date and start time of this appointment (e.g. 04/12/2021 12:00 PM ). Click 'Enter' when complete.");
+                        var startDateString = Console.ReadLine();
+
+                        if (!DateTime.TryParse(startDateString, out startTime))
+                        {
+                            Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", startDateString);
+                            startTime = DateTime.Today.AddHours(12);
+                        }
+
+                        Console.WriteLine("Provide the date and end time of this appointment (e.g. 04/12/2021 12:30 PM). Click 'Enter' when complete.");
+                        var endDateString = Console.ReadLine();
+
+                        if (!DateTime.TryParse(endDateString, out endTime))
+                        {
+                            Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:30 pm", endDateString);
+                            endTime = DateTime.Today.AddHours(12).AddMinutes(30);
+
+                        }
+
+                        Console.WriteLine("Provide the names of the attendees followed by 'Enter'. Type in \"Done\" when completed.");
+                        var attendee = Console.ReadLine();
+
+                        //loop until user inputs "done" - ignore case
+                        while (!string.Equals(attendee, "done", StringComparison.OrdinalIgnoreCase))
+                        {
+                            attendeeList.Add(attendee);
+                            attendee = Console.ReadLine();
+                        }
+
+
+                        taskList.Add(new TaskLibrary.Appointment().AddAppointment(name, desc, startTime, endTime, attendeeList));
+
+
+                        break;
+
+                    // delete item
+                    case "3":
+
+                        PrintTaskList(itemNavigator);
 
                         Console.WriteLine("Which task would you like to delete? Please provide a number from your outstanding tasks.");
 
@@ -94,7 +139,7 @@ namespace TaskManagerApp
                         {
                             int numVal = Int32.Parse(taskChoice);
 
-                            new TaskLibrary.Task().DeleteTask(taskList, numVal - 1); 
+                            new TaskLibrary.Task().DeleteItem(taskList, numVal - 1); 
                             // -1 to account for the fact that Id starts at 1, not 0
                         }
                         catch (FormatException)
@@ -105,10 +150,10 @@ namespace TaskManagerApp
 
                         break;
 
-                    // edit task
-                    case "3":
+                    // edit item
+                    case "4":
 
-                        PrintTaskList(taskNavigator);
+                        PrintTaskList(itemNavigator);
 
                         Console.WriteLine("Which task would you like to edit? Please provide a number from your outstanding tasks.");
 
@@ -129,7 +174,7 @@ namespace TaskManagerApp
                                 Console.WriteLine("Would you like to replace the title with?");
                                 replacement = Console.ReadLine();    
 
-                                new TaskLibrary.Task().EditTitle(taskList, numVal-1, replacement);
+                                new TaskLibrary.Task().EditTitle(taskList, numVal - 1, replacement);
                             }
                             else if (editChoice == "d")
                             {
@@ -155,11 +200,11 @@ namespace TaskManagerApp
                         
                         break;
                         
-                    // complete task
-                    case "4":
+                    // complete item
+                    case "5":
                         Console.WriteLine("Which task would you like to complete? Please provide a number from your outstanding tasks.");
 
-                        PrintTaskList(taskNavigator, true);
+                        PrintTaskList(itemNavigator, true);
 
                         taskChoice = Console.ReadLine();   
 
@@ -167,7 +212,7 @@ namespace TaskManagerApp
                         {
                             int numVal = Int32.Parse(taskChoice);
                             
-                            new TaskLibrary.Task().Complete(taskList[numVal-1]);
+                            new TaskLibrary.Task().Complete((TaskLibrary.Task)taskList[numVal-1]);
                             // -1 to account for the fact that the list shown to user skips 0
 
 
@@ -180,67 +225,68 @@ namespace TaskManagerApp
 
                         break;
 
-                    // print outstanding tasks
-                    case "5":
-
-
-                        PrintTaskList(taskNavigator,true);
-
-                        //new TaskLibrary.Task().ListOutstanding(taskList);
-
-                        break;
-                    // print all tasks
+                    // print outstanding items
                     case "6":
 
-                        //new TaskLibrary.Task().ListAllTasks(taskList);
-                        PrintTaskList(taskNavigator);
+                        PrintTaskList(itemNavigator,true);
 
                         break;
 
+                    // print all tasks
                     case "7":
+
+                        PrintTaskList(itemNavigator);
+
+                        break;
+
+                    case "8":
                         break;
 
                     default:
                         Console.WriteLine("Your selection, {0}, was not found. Returning to menu...\n", selection);
+                        
                         break;
 
                 }
-            } while (selection != "7");         //7 means exit application
+            } while (selection != "8");         //8 means exit application
 
             Console.WriteLine("Thank you for using the application. Shutting down.. \n");
 
         }
-        public static void PrintTaskList(ListNavigator<TaskLibrary.Task> taskNavigator, bool onlyOutstanding = false)
+        public static void PrintTaskList(ListNavigator<TaskLibrary.ItemBase> itemNavigator, bool onlyOutstanding = false)
         {
 
             bool isNavigating = true;
             while (isNavigating)
             {
-                var page = taskNavigator.GetCurrentPage();
+                var page = itemNavigator.GetCurrentPage();
                 Console.WriteLine("\n");
 
-                foreach (var task in page)
+                foreach (var item in page)
                 {
-
-                    if (onlyOutstanding == true)        //only print outstanding
+                    /*
+                    if (onlyOutstanding == true && item is TaskLibrary.Task )        //only print outstanding
                     {
-                        if (!task.Value.IsCompleted)
+                        if (!item.Value.IsCompleted)
                         {
-                            Console.WriteLine($"{task.Value}");
+                            Console.WriteLine($"{item.Value}");
                         }
                     }
                     else
+                    */
                     {
-                        Console.WriteLine($"{task.Value}");
+                        Console.WriteLine($"{item.Value}");
                     }
+                    
                 }
 
-                if (taskNavigator.HasPreviousPage)
+
+                if (itemNavigator.HasPreviousPage)
                 {
                     Console.WriteLine("P. Previous");
                 }
 
-                if (taskNavigator.HasNextPage)
+                if (itemNavigator.HasNextPage)
                 {
                     Console.WriteLine("N. Next");
                 }
@@ -248,11 +294,11 @@ namespace TaskManagerApp
                 var selection = Console.ReadLine();
                 if (selection.Equals("P", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    taskNavigator.GoBackward();
+                    itemNavigator.GoBackward();
                 }
                 else if (selection.Equals("N", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    taskNavigator.GoForward();
+                    itemNavigator.GoForward();
                 }
                 else
                 {
