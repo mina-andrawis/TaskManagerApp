@@ -26,6 +26,9 @@ namespace Task.Library
 
         public string Description { get; set; }
 
+        public bool IsCompleted { get; set; }
+
+
         public void EditTitle(List<ItemBase> taskList, int position, string replacement)
         {
             taskList[position].Name = replacement;
@@ -34,6 +37,12 @@ namespace Task.Library
         public void EditDescription(List<ItemBase> taskList, int position, string replacement)
         {
             taskList[position].Description = replacement;
+        }
+
+        public void Complete(ItemBase task)
+        {
+
+            task.IsCompleted = true;
         }
 
         public void DeleteItem(List<ItemBase> taskList, int position)

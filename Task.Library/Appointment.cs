@@ -29,10 +29,10 @@ namespace Task.Library
 
         public override string ToString()
         {
-            return $"Appointment {Id}. {Name} - {Description} \n" +
-                $"Start Time: {Start}\n" +
-                $"End Time: {Stop}\n" +
-                $"Attendees: { string.Join(", ", Attendees)}";
+            return $"{Id}.{Name} - {Description} \n" +
+                $"  Start Time: {Start}\n" +
+                $"  End Time: {Stop}\n" +
+                $"  Attendees: { string.Join(", ", Attendees)}";
         }
     }
 }

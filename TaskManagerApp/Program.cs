@@ -202,9 +202,11 @@ namespace TaskManagerApp
                         
                     // complete item
                     case "5":
-                        Console.WriteLine("Which task would you like to complete? Please provide a number from your outstanding tasks.");
 
                         PrintTaskList(itemNavigator, true);
+
+                        Console.WriteLine("Which task would you like to complete? Please provide a number from your outstanding tasks.");
+
 
                         taskChoice = Console.ReadLine();   
 
@@ -212,7 +214,7 @@ namespace TaskManagerApp
                         {
                             int numVal = Int32.Parse(taskChoice);
                             
-                            new TaskLibrary.Task().Complete((TaskLibrary.Task)taskList[numVal-1]);
+                            new TaskLibrary.Task().Complete(taskList[numVal-1]);
                             // -1 to account for the fact that the list shown to user skips 0
 
 
@@ -259,13 +261,18 @@ namespace TaskManagerApp
             bool isNavigating = true;
             while (isNavigating)
             {
+                if (taskList.Count == 0)       //avoid PageFaultException if size is 0
+                {
+                    Console.WriteLine("\nThe list is empty.\n");
+                    break;
+                }
+
                 var page = itemNavigator.GetCurrentPage();
                 Console.WriteLine("\n");
 
                 foreach (var item in page)
                 {
-                    /*
-                    if (onlyOutstanding == true && item is TaskLibrary.Task )        //only print outstanding
+                    if (onlyOutstanding == true)        //only print outstanding
                     {
                         if (!item.Value.IsCompleted)
                         {
@@ -273,11 +280,10 @@ namespace TaskManagerApp
                         }
                     }
                     else
-                    */
                     {
                         Console.WriteLine($"{item.Value}");
                     }
-                    
+
                 }
 
 

@@ -10,7 +10,6 @@ namespace Task.Library
 
         // { set; get;} automatically creates private fields , no need for declaring _deadline or _isCompleted
         public DateTime Deadline { get; set; }
-        public bool IsCompleted { get; set; }
         
 
         public Task AddTask(string name, string desc, DateTime deadline, bool completed)
@@ -26,11 +25,7 @@ namespace Task.Library
 
         }
 
-        public void Complete(Task task)
-        {
 
-            task.IsCompleted = true;
-        }
 
 
         public override string ToString()
