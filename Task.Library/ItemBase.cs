@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Task.Library;
 
 namespace Task.Library
 {
@@ -29,15 +30,8 @@ namespace Task.Library
         public bool IsCompleted { get; set; }
 
 
-        public void EditTitle(List<ItemBase> taskList, int position, string replacement)
-        {
-            taskList[position].Name = replacement;
-        }
 
-        public void EditDescription(List<ItemBase> taskList, int position, string replacement)
-        {
-            taskList[position].Description = replacement;
-        }
+
 
         public void Complete(ItemBase task)
         {
