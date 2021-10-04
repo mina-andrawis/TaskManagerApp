@@ -31,8 +31,6 @@ namespace Task.Library
 
 
 
-
-
         public void Complete(ItemBase task)
         {
 
