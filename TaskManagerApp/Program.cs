@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using TaskLibrary = Task.Library;
 using Task.Library;
 using System.Linq;
+using System.IO;
+using Newtonsoft.Json;
+using Windows.Storage;
 
 namespace TaskManagerApp
 {
@@ -13,11 +16,29 @@ namespace TaskManagerApp
     class Program
     {
         //list to organize the tasks
-        public static List<TaskLibrary.ItemBase> taskList= new List<TaskLibrary.ItemBase>();
+        public static List<ItemBase> taskList;
+
+        private static string persistencePath;
+
+        //allows json file to be type aware so appointments and tasks are differentiated
+        private static JsonSerializerSettings serializationSettings; 
 
         static void Main(string[] args)
         {
+            serializationSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
+            persistencePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\SaveData.txt";
+
+            if (File.Exists(persistencePath))
+            {
+                //deserialize the list (read from file and create new list from json)
+                taskList = JsonConvert.DeserializeObject<List<ItemBase>>(File.ReadAllText(persistencePath),serializationSettings);
+
+            }
+            else
+            {
+                taskList = new List<ItemBase>();
+            }
             string selection="";
 
             var itemNavigator = new ListNavigator<TaskLibrary.ItemBase>(taskList);
@@ -35,8 +56,9 @@ namespace TaskManagerApp
                     "    5) complete item\n" +
                     "     6) list all outstanding items\n" +
                     "      7) list all items\n" +
-                    "       8) search\n" +
-                    "        8) close task manager\n");
+                    "       8) search for a string\n" +
+                    "        9) save\n" +
+                    "         10) close task manager\n");
 
                 selection = Console.ReadLine();
 
@@ -48,7 +70,7 @@ namespace TaskManagerApp
                     case "1":
 
                         //used for both appointment and task
-                        var name = " ";     
+                        var name = " ";
                         var desc = " ";
 
                         var deadline = new DateTime(2000, 01, 01);    //placeholder date
@@ -82,8 +104,8 @@ namespace TaskManagerApp
                     case "2":
 
                         //placeholder values        
-                        var startTime = new DateTime(2000, 01, 01);    
-                        var endTime = new DateTime(2000, 01, 01);    
+                        var startTime = new DateTime(2000, 01, 01);
+                        var endTime = new DateTime(2000, 01, 01);
 
 
                         Console.WriteLine("What is the name of your appointment? Click 'Enter' when complete.");
@@ -124,6 +146,7 @@ namespace TaskManagerApp
 
                         taskList.Add(new TaskLibrary.Appointment().AddAppointment(name, desc, startTime, endTime, attendeeList));
 
+                        PrintTaskList(itemNavigator);
 
                         break;
 
@@ -135,14 +158,14 @@ namespace TaskManagerApp
                         Console.WriteLine("Which task would you like to delete? Please provide a number from your outstanding tasks.");
 
 
-                        string taskChoice = Console.ReadLine(); 
+                        string taskChoice = Console.ReadLine();
 
 
                         try
                         {
                             int numVal = Int32.Parse(taskChoice);
 
-                            new TaskLibrary.Task().DeleteItem(taskList, numVal - 1); 
+                            new TaskLibrary.Task().DeleteItem(taskList, numVal - 1);
                             // -1 to account for the fact that Id starts at 1, not 0
                         }
                         catch (FormatException)
@@ -158,8 +181,6 @@ namespace TaskManagerApp
 
                         ItemBase taskToEdit;        //task instance that will be edited
                         string internalEditChoice;  //user hoice of title, description, deadline, ect..
-                        DateTime replacementDate;   //tranformed date to replace various DateTimes
-                        string replacement;         //user input for replacement
 
                         PrintTaskList(itemNavigator);
 
@@ -175,42 +196,9 @@ namespace TaskManagerApp
                                 Console.WriteLine("Would you like to edit the title (t), description (d), or deadline (D) of the task?");
                                 internalEditChoice = Console.ReadLine();
 
-                                switch (internalEditChoice)
-                                {
-                                    //title
-                                    case "t":
-                                        Console.WriteLine("Would you like to replace the title with?");
-                                        replacement = Console.ReadLine();
+                                //switch statement to take care of internal switch statement to improve readability
+                                internalTaskEditSwitch(internalEditChoice, editChoice);
 
-                                        EditTitle(taskList, editChoice - 1, replacement);
-
-                                        break;
-
-                                    //description
-                                    case "d":
-                                        Console.WriteLine("Would you like to replace the description with?");
-                                        replacement = Console.ReadLine();
-
-                                        EditDescription(taskList, editChoice - 1, replacement);
-
-                                        break;
-
-                                    //deadline
-                                    case "D":
-                                        Console.WriteLine("Would you like to replace the deadline with with?");
-                                        replacement = Console.ReadLine();
-
-                                        if (!DateTime.TryParse(replacement, out replacementDate))
-                                        {
-                                            Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", replacement);
-                                            replacementDate = DateTime.Today.AddHours(12);
-                                        }
-
-                                        EditDeadline(taskList, editChoice - 1, replacementDate);
-
-                                        break;
-
-                                }
 
                             }
                             else if (taskToEdit is TaskLibrary.Appointment)     //the selected item is a Task
@@ -218,84 +206,14 @@ namespace TaskManagerApp
                                 Console.WriteLine("Would you like to edit the title (t), description (d), start date/time (s), end date/time (e), or attendees (a) of the appointment?");
                                 internalEditChoice = Console.ReadLine();
 
-
-                                //MOVE INTO SEPEARTE METHOD EVNTUALLY
-                                switch (internalEditChoice)
-                                {
-                                    //title
-                                    case "t":
-                                        Console.WriteLine("Would you like to replace the title with?");
-                                        replacement = Console.ReadLine();
-
-                                        EditTitle(taskList, editChoice - 1, replacement);
-
-                                        break;
-                                    //description
-                                    case "d":
-                                        Console.WriteLine("Would you like to replace the description with?");
-                                        replacement = Console.ReadLine();
-
-                                        EditDescription(taskList, editChoice - 1, replacement);
-
-                                        break;
-
-                                    //start
-                                    case "s":
-                                        Console.WriteLine("Would you like to replace the start date and time with?");
-                                        replacement = Console.ReadLine();
-
-                                        if (!DateTime.TryParse(replacement, out replacementDate))
-                                        {
-                                            Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", replacement);
-                                            replacementDate = DateTime.Today.AddHours(12);
-
-                                        }
-                                        EditStart(taskList, editChoice - 1, replacementDate);
+                                //switch statement to take care of internal switch statement to improve readability
+                                internalAppointmentEditSwitch(internalEditChoice, editChoice);
 
 
-                                        break;
-
-                                    //end
-                                    case "e":
-                                        Console.WriteLine("Would you like to replace the end date and time with?");
-                                        replacement = Console.ReadLine();
-
-                                        if (!DateTime.TryParse(replacement, out replacementDate))
-                                        {
-                                            Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", replacement);
-                                            replacementDate = DateTime.Today.AddHours(12);
-
-                                        }
-                                        EditStop(taskList, editChoice - 1, replacementDate);
-
-
-                                        break;
-
-                                    //attendees
-                                    case "a":
-                                        Console.WriteLine("Would you like to replace attendee list with? Type \"done\" when completed.");
-                                        replacement = Console.ReadLine();
-
-                                        
-                                        var newAttendeeList = new List<String>();
-
-                                        //loop until user inputs "done" - ignore case
-                                        while (!string.Equals(replacement, "done", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            newAttendeeList.Add(replacement);
-                                            replacement = Console.ReadLine();
-                                        }
-
-                                        EditAttendees(taskList, editChoice - 1, newAttendeeList);
-                                        break;
-
-
-
-                                }
                             }
                         }
                         break;
-                        
+
                     // complete item
                     case "5":
 
@@ -304,13 +222,13 @@ namespace TaskManagerApp
                         Console.WriteLine("Which task would you like to complete? Please provide a number from your outstanding tasks.");
 
 
-                        taskChoice = Console.ReadLine();   
+                        taskChoice = Console.ReadLine();
 
                         try
                         {
                             int numVal = Int32.Parse(taskChoice);
-                            
-                            new TaskLibrary.Task().Complete(taskList[numVal-1]);
+
+                            new TaskLibrary.Task().Complete(taskList[numVal - 1]);
                             // -1 to account for the fact that the list shown to user skips 0
 
 
@@ -326,7 +244,7 @@ namespace TaskManagerApp
                     // print outstanding items
                     case "6":
 
-                        PrintTaskList(itemNavigator,true);
+                        PrintTaskList(itemNavigator, true);
 
                         break;
 
@@ -339,22 +257,49 @@ namespace TaskManagerApp
 
                     //search
                     case "8":
+                        Console.WriteLine("What string would you like to search for?\n");
+                        var searchSelection = Console.ReadLine();
+
+                        var matchedTasks =
+                            from task in taskList
+                            where task.Name.Contains(searchSelection) ||
+                                task.Description.Contains(searchSelection)
+                            select task;
+
+
+                        foreach (var task in matchedTasks.ToList())
+                        {
+
+                            Console.WriteLine(task.ToString());
+                        }
 
                         break;
-
+                    //save
                     case "9":
+
+                        // save jsonList (string) by converting taskList and settings (to allow type differentiation
+                        // between appointment and task derived classes
+                        var jsonList = JsonConvert.SerializeObject(taskList, serializationSettings);
+                        File.WriteAllText($"{persistencePath}", jsonList);
+
                         break;
+
+                    //quit
+                    case "10":
+                        break;
+
                     default:
                         Console.WriteLine("Your selection, {0}, was not found. Returning to menu...\n", selection);
                         
                         break;
 
                 }
-            } while (selection != "9");         //9 means exit application
+            } while (selection != "10");         //10 - save quit, 11 - exit application
 
             Console.WriteLine("Thank you for using the application. Shutting down.. \n");
 
         }
+
         public static void PrintTaskList(ListNavigator<TaskLibrary.ItemBase> itemNavigator, bool onlyOutstanding = false)
         {
 
@@ -386,7 +331,6 @@ namespace TaskManagerApp
 
                 }
 
-
                 if (itemNavigator.HasPreviousPage)
                 {
                     Console.WriteLine("P. Previous");
@@ -416,18 +360,136 @@ namespace TaskManagerApp
             Console.WriteLine();
         }
 
+        /* SWITCH STATEMENTS FOR INTERNAL EDIT USE : increase readability*/
+        /*************************************************************************************/
+
+        public static void internalAppointmentEditSwitch(string internalEditChoice, int editChoice)
+        {
+            switch (internalEditChoice)
+            {
+                //title
+                case "t":
+                    Console.WriteLine("Would you like to replace the title with?");
+                    var replacement = Console.ReadLine();
+
+                    EditTitle(taskList, editChoice - 1, replacement);
+
+                    break;
+                //description
+                case "d":
+                    Console.WriteLine("Would you like to replace the description with?");
+                    replacement = Console.ReadLine();
+
+                    EditDescription(taskList, editChoice - 1, replacement);
+
+                    break;
+
+                //start
+                case "s":
+                    Console.WriteLine("Would you like to replace the start date and time with?");
+                    replacement = Console.ReadLine();
+
+                    if (!DateTime.TryParse(replacement,out var replacementDate))
+                    {
+                        Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", replacement);
+                        replacementDate = DateTime.Today.AddHours(12);
+
+                    }
+                    EditStart(taskList, editChoice - 1, replacementDate);
+
+                    break;
+
+                //end
+                case "e":
+                    Console.WriteLine("Would you like to replace the end date and time with?");
+                    replacement = Console.ReadLine();
+
+                    if (!DateTime.TryParse(replacement, out replacementDate))
+                    {
+                        Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", replacement);
+                        replacementDate = DateTime.Today.AddHours(12);
+
+                    }
+                    EditStop(taskList, editChoice - 1, replacementDate);
+
+                    break;
+
+                //attendees
+                case "a":
+                    Console.WriteLine("Would you like to replace attendee list with? Type \"done\" when completed.");
+                    replacement = Console.ReadLine();
+
+
+                    var newAttendeeList = new List<String>();
+
+                    //loop until user inputs "done" - ignore case
+                    while (!string.Equals(replacement, "done", StringComparison.OrdinalIgnoreCase))
+                    {
+                        newAttendeeList.Add(replacement);
+                        replacement = Console.ReadLine();
+                    }
+
+                    EditAttendees(taskList, editChoice - 1, newAttendeeList);
+                    break;
+
+            }
+        }
+
+        public static void internalTaskEditSwitch(string internalEditChoice, int editChoice)
+        {
+            switch (internalEditChoice)
+            {
+                //title
+                case "t":
+                    Console.WriteLine("Would you like to replace the title with?");
+                    var replacement = Console.ReadLine();
+
+                    EditTitle(taskList, editChoice - 1, replacement);
+
+                    break;
+
+                //description
+                case "d":
+                    Console.WriteLine("Would you like to replace the description with?");
+                    replacement = Console.ReadLine();
+
+                    EditDescription(taskList, editChoice - 1, replacement);
+
+                    break;
+
+                //deadline
+                case "D":
+                    Console.WriteLine("Would you like to replace the deadline with with?");
+                    replacement = Console.ReadLine();
+
+                    if (!DateTime.TryParse(replacement, out var replacementDate))
+                    {
+                        Console.WriteLine("Unable to parse '{0}'. Defaulting to today at 12:00 pm", replacement);
+                        replacementDate = DateTime.Today.AddHours(12);
+                    }
+
+                    EditDeadline(taskList, editChoice - 1, replacementDate);
+
+                    break;
+
+            }
+
+        }
+
+        /*************************************************************************************/
+
 
 
         /*EDIT TASKS METHODS*/
         /*************************************************************************************/
         public static void EditTitle(List<ItemBase> taskList, int position, string replacement)
         {
-            (taskList[position] as TaskLibrary.Task).Name = replacement;
+            (taskList[position]).Name = replacement;
         }
 
         public static void EditDescription(List<ItemBase> taskList, int position, string replacement)
         {
-            (taskList[position] as TaskLibrary.Task).Description = replacement;
+            (taskList[position]).Description = replacement;
         }
 
         
