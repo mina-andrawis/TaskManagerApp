@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Task.Library.ViewModels;
+using TaskManagerUWP.Dialogs;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,12 +27,13 @@ namespace TaskManagerUWP
         public MainPage()
         {
             this.InitializeComponent();
+            DataContext = new MainViewModel();
         }
 
         private async void AddNew_Click(object sender, RoutedEventArgs e)
         {
-            /*var diag = new TicketDialog((DataContext as MainViewModel).SupportTickets);
-            await diag.ShowAsync();*/
+            var diag = new TaskDialog((DataContext as MainViewModel).taskList);
+            await diag.ShowAsync(); 
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
