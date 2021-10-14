@@ -16,8 +16,8 @@ using Windows.UI.Xaml.Navigation;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace TaskManagerUWP.Dialogs
-{
+namespace TaskManagerUWP.Dialogs { 
+
     public sealed partial class TaskDialog : ContentDialog
     {
         private IList<ItemBase> Tasks;
@@ -32,7 +32,7 @@ namespace TaskManagerUWP.Dialogs
         {
             Tasks.Add(DataContext as ItemBase);
         }
-
+        
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
         }

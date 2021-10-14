@@ -29,12 +29,6 @@ namespace Task.Library.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public void DeleteItem()
         {
             if (SelectedItem != null)
@@ -42,5 +36,12 @@ namespace Task.Library.ViewModels
                 taskList.Remove(SelectedItem);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }
