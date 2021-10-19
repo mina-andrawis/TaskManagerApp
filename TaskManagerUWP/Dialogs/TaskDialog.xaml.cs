@@ -25,7 +25,7 @@ namespace TaskManagerUWP.Dialogs {
         public TaskDialog(IList<ItemBase> supportTickets)
         {
             InitializeComponent();
-            DataContext = new Task.Library.UWP.Models.Task();
+            DataContext = new Task.Library.UWP.Models.ToDo();
             this.Tasks = supportTickets;
         }
 

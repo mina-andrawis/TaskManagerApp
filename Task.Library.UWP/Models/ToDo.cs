@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Task.Library.UWP.Models
 {
-    public class Task : ItemBase
+    public class ToDo : ItemBase
     {
 
 
@@ -11,16 +11,16 @@ namespace Task.Library.UWP.Models
         public DateTime Deadline { get; set; }
         
 
-        public Task AddTask(string name, string desc, DateTime deadline, bool completed)
+        public ToDo AddTask(string name, string desc, DateTime deadline, bool completed)
         {
-            Task newTask = new Task();
+            ToDo newTask = new ToDo();
 
             newTask.Name = name;
             newTask.Description = desc;
             newTask.Deadline = deadline;
             newTask.IsCompleted = completed;
 
-            return newTask;
+            return newTask; 
 
         }
 
