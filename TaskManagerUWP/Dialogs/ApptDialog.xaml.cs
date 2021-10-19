@@ -17,23 +17,24 @@ using Windows.UI.Xaml.Navigation;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace TaskManagerUWP.Dialogs { 
+namespace TaskManagerUWP.Dialogs
+{
 
-    public sealed partial class TaskDialog : ContentDialog
+    public sealed partial class ApptDialog : ContentDialog
     {
         private IList<ItemBase> Tasks;
-        public TaskDialog(IList<ItemBase> supportTickets)
+        public ApptDialog(IList<ItemBase> taskList)
         {
             InitializeComponent();
-            DataContext = new Task.Library.UWP.Models.Task();
-            this.Tasks = supportTickets;
+            DataContext = new Appointment();
+            this.Tasks = taskList;
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             Tasks.Add(DataContext as ItemBase);
         }
-        
+
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
         }

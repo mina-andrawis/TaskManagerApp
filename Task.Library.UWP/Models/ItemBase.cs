@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Task.Library;
 
-namespace Task.Library.Models
+namespace Task.Library.UWP.Models
 {
     public class ItemBase
     {

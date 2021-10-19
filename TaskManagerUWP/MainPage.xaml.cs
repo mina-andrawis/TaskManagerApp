@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Task.Library.ViewModels;
+using Task.Library.UWP.ViewModels;
 using TaskManagerUWP.Dialogs;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -30,10 +30,16 @@ namespace TaskManagerUWP
             DataContext = new MainViewModel();
         }
 
-        private async void AddNew_Click(object sender, RoutedEventArgs e)
+        private async void AddNewTask_Click(object sender, RoutedEventArgs e)
         {
             var diag = new TaskDialog((DataContext as MainViewModel).taskList);
             await diag.ShowAsync(); 
+        }
+
+        private async void AddNewAppt_Click(object sender, RoutedEventArgs e)
+        {
+            var diag = new ApptDialog((DataContext as MainViewModel).taskList);
+            await diag.ShowAsync();
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -45,5 +51,11 @@ namespace TaskManagerUWP
         {
             /*(DataContext as MainViewModel).Remove();*/
         }
+
+        private async void Search_Click(object sender, RoutedEventArgs e)
+        {
+            await (DataContext as MainViewModel).Search();
+        }
     }
+
 }

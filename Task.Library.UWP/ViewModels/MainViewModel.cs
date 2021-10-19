@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Task.Library.Models;
+using Task.Library.UWP.Models;
 using System.Threading.Tasks;
 
-namespace Task.Library.ViewModels
+namespace Task.Library.UWP.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {

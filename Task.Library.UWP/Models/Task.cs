@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Task.Library.Models
+namespace Task.Library.UWP.Models
 {
     public class Task : ItemBase
     {
