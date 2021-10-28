@@ -6,10 +6,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Task.Library.UWP.Models;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace Task.Library.UWP.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : Page, INotifyPropertyChanged
     {
         public ItemBase SelectedItem { get; set; }
 
@@ -51,7 +52,5 @@ namespace Task.Library.UWP.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
     }
 }

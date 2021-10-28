@@ -42,14 +42,16 @@ namespace TaskManagerUWP
             await diag.ShowAsync();
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void Delete_Click(object sender, RoutedEventArgs e) 
         {
             /*(DataContext as MainViewModel).Remove();*/
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private async void Edit_Click(object sender, RoutedEventArgs e)
         {
-            /*(DataContext as MainViewModel).Remove();*/
+            var dataContext = (DataContext as MainViewModel);
+            var apptDialog = new ApptDialog(dataContext.SelectedItem, dataContext.taskList);
+            await apptDialog.ShowAsync();
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e)

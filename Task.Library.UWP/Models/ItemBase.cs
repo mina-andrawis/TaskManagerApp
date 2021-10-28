@@ -8,20 +8,10 @@ namespace Task.Library.UWP.Models
     public class ItemBase
     {
         private static int currentId = 1;       //keep track of the amount of tasks
-        private int _id = -1;       //check if id is new
+        private int _id = 0;       //check if id is new
 
         // properties
-        public int Id
-        {
-            get
-            {
-                if (_id <= 0)   // if the id is new, set the id to currentId
-                {
-                    _id = currentId++;
-                }
-                return _id;
-            }
-        }
+        public int Id { get; set; }
 
         public int Priority { get; set; }
 
@@ -53,6 +43,16 @@ namespace Task.Library.UWP.Models
             {
                 Console.WriteLine("The selection was not found. Returning to menu...\n");
             }
+        }
+
+        public void SetId()
+        {
+            if (Id > 0)
+            {
+                return;
+            }
+
+            Id = ++FakeDatabase.lastItemId;
         }
 
     }

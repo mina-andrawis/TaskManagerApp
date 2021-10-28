@@ -30,9 +30,29 @@ namespace TaskManagerUWP.Dialogs
             this.Tasks = taskList;
         }
 
+        public ApptDialog(ItemBase SelectedAppt, IList<ItemBase> taskList)
+        {
+            InitializeComponent();
+            DataContext = SelectedAppt;
+            this.Tasks = taskList;
+        }
+
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            Tasks.Add(DataContext as ItemBase);
+            var appt = DataContext as ItemBase;
+            var apptIsNew = appt.Id <= 0;
+            appt.SetId();
+            if (apptIsNew)
+            {
+                Tasks.Add(appt);
+            }
+            else
+            {
+                var apptToEdit = Tasks.FirstOrDefault(t => t.Id == appt.Id);
+                var index = Tasks.IndexOf(apptToEdit);
+                Tasks.RemoveAt(index);
+                Tasks.Insert(index, appt);
+            }
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

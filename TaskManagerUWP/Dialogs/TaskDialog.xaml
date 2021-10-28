@@ -15,9 +15,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
+
+        </Grid.RowDefinitions >
         <TextBox Grid.Row="0" Header="Title" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <TextBox Grid.Row="1" Header="Description" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <!--<DatePicker x:Name="arrivalDatePicker" Header="Deadline" 
+                DayFormat="{}{day.integer} ({dayofweek.abbreviated})"
+                SelectedDateChanged="DeadlineDatePicker_SelectedDateChanged" HorizontalAlignment="Center" Margin="0,10,0,0" Grid.Row="2" VerticalAlignment="Top"/>-->
     </Grid>
 </ContentDialog>

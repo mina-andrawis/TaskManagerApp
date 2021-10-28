@@ -37,5 +37,7 @@ namespace TaskManagerUWP.Dialogs {
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
         }
+
+
     }
 }

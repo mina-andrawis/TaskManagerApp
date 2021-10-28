@@ -29,10 +29,10 @@ namespace Task.Library.UWP.Models
 
         public override string ToString()
         {
-            return $"{Id}.{Name} - {Description} \n" +
-                $"  Start Time: {Start}\n" +
+            return $"[{Priority}] {Name}, {Description} \n"; // +
+              /*  $"  Start Time: {Start}\n" +
                 $"  End Time: {Stop}\n" +
-                $"  Attendees: { string.Join(", ", Attendees)}";
+                $"  Attendees: { string.Join(", ", Attendees)}";*/
         }
     }
 }
