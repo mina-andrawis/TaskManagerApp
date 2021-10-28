@@ -47,7 +47,7 @@ namespace Task.Library.UWP.Models
 
         public void SetId()
         {
-            if (Id > 0)
+            if (Id > 0)     //don't increment Id if it has already been set
             {
                 return;
             }
