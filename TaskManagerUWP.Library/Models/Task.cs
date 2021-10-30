@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Task.Library
+namespace Task.Library.Models
 {
     public class Task : ItemBase
     {

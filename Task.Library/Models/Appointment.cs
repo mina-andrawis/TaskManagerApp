@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Task.Library
+namespace Task.Library.Models
 {
     public class Appointment : ItemBase
     {

@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Collections.Generic;
 
 using TaskLibrary = Task.Library;
-using Task.Library;
+using Task.Library.Models;
 using System.Linq;
 using System.IO;
 using Newtonsoft.Json;
 using Windows.Storage;
+using Task.Library;
 
 namespace TaskManagerApp
 {
@@ -41,7 +42,7 @@ namespace TaskManagerApp
             }
             string selection="";
 
-            var itemNavigator = new ListNavigator<TaskLibrary.ItemBase>(taskList);
+            var itemNavigator = new ListNavigator<ItemBase>(taskList);
 
             //do while to loop menu after each choice
             do
@@ -94,7 +95,7 @@ namespace TaskManagerApp
 
                         // use method found in TaskLibrary in order to create a 
                         // new Task object and insert it into the taskList
-                        taskList.Add(new TaskLibrary.Task().AddTask(name, desc, deadline, completed));
+                        taskList.Add(new TaskLibrary.Models.Task().AddTask(name, desc, deadline, completed));
 
                         PrintTaskList(itemNavigator);
 
@@ -144,7 +145,7 @@ namespace TaskManagerApp
                         }
 
 
-                        taskList.Add(new TaskLibrary.Appointment().AddAppointment(name, desc, startTime, endTime, attendeeList));
+                        taskList.Add(new TaskLibrary.Models.Appointment().AddAppointment(name, desc, startTime, endTime, attendeeList));
 
                         PrintTaskList(itemNavigator);
 
@@ -165,7 +166,7 @@ namespace TaskManagerApp
                         {
                             int numVal = Int32.Parse(taskChoice);
 
-                            new TaskLibrary.Task().DeleteItem(taskList, numVal - 1);
+                            new TaskLibrary.Models.Task().DeleteItem(taskList, numVal - 1);
                             // -1 to account for the fact that Id starts at 1, not 0
                         }
                         catch (FormatException)
@@ -191,7 +192,7 @@ namespace TaskManagerApp
                             taskToEdit = taskList.FirstOrDefault(t => t.Id == editChoice);
 
 
-                            if (taskToEdit is TaskLibrary.Task)     //the selected item is a Task
+                            if (taskToEdit is TaskLibrary.Models.Task)     //the selected item is a Task
                             {
                                 Console.WriteLine("Would you like to edit the title (t), description (d), or deadline (D) of the task?");
                                 internalEditChoice = Console.ReadLine();
@@ -201,7 +202,7 @@ namespace TaskManagerApp
 
 
                             }
-                            else if (taskToEdit is TaskLibrary.Appointment)     //the selected item is a Task
+                            else if (taskToEdit is TaskLibrary.Models.Appointment)     //the selected item is an Appointment
                             {
                                 Console.WriteLine("Would you like to edit the title (t), description (d), start date/time (s), end date/time (e), or attendees (a) of the appointment?");
                                 internalEditChoice = Console.ReadLine();
@@ -228,7 +229,7 @@ namespace TaskManagerApp
                         {
                             int numVal = Int32.Parse(taskChoice);
 
-                            new TaskLibrary.Task().Complete(taskList[numVal - 1]);
+                            new TaskLibrary.Models.Task().Complete(taskList[numVal - 1]);
                             // -1 to account for the fact that the list shown to user skips 0
 
 
@@ -301,7 +302,7 @@ namespace TaskManagerApp
 
         }
 
-        public static void PrintTaskList(ListNavigator<TaskLibrary.ItemBase> itemNavigator, bool onlyOutstanding = false)
+        public static void PrintTaskList(ListNavigator<TaskLibrary.Models.ItemBase> itemNavigator, bool onlyOutstanding = false)
         {
 
             bool isNavigating = true;
@@ -496,22 +497,22 @@ namespace TaskManagerApp
         
         public static void EditDeadline(List<ItemBase> taskList, int position, DateTime replacement)
         {
-            (taskList[position] as TaskLibrary.Task).Deadline = replacement;
+            (taskList[position] as TaskLibrary.Models.Task).Deadline = replacement;
         }
 
         public static void EditStart(List<ItemBase> taskList, int position, DateTime replacement)
         {
-            (taskList[position] as TaskLibrary.Appointment).Start = replacement;
+            (taskList[position] as TaskLibrary.Models.Appointment).Start = replacement;
         }
 
         public static void EditStop(List<ItemBase> taskList, int position, DateTime replacement)
         {
-            (taskList[position] as TaskLibrary.Appointment).Stop = replacement;
+            (taskList[position] as TaskLibrary.Models.Appointment).Stop = replacement;
         }
 
         public static void EditAttendees(List<ItemBase> taskList, int position, List<String> replacement)
         {
-            (taskList[position] as TaskLibrary.Appointment).Attendees = replacement;
+            (taskList[position] as TaskLibrary.Models.Appointment).Attendees = replacement;
         }
         /*************************************************************************************/
 
