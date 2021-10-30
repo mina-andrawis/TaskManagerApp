@@ -1,31 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Task.Library.UWP.Models
 {
     public class Appointment : ItemBase
     {
+
+        public Appointment()
+        {
+            Priority = 0;
+            Name = "";
+            Description = "";
+            Start = DateTime.Today;
+            Stop = DateTime.Today.AddHours(1);
+            Attendees = new ObservableCollection<String>();
+        }
         public DateTime Start { set; get; }
         public DateTime Stop { set; get; }
-        public List<String> Attendees { set; get; }
-
-        public Appointment AddAppointment(string name, string desc, DateTime start, DateTime stop, List<String> attendees)
-        {
-
-            Appointment newAppt = new Appointment();
-
-            newAppt.Name = name;
-            newAppt.Description = desc;
-            newAppt.Start = start;
-            newAppt.Stop = stop;
-            newAppt.Attendees = attendees;
-
-            return newAppt;
-
-        }
-
-
+        public ObservableCollection<String> Attendees { set; get; }
 
         public override string ToString()
         {

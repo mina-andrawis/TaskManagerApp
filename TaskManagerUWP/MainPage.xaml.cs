@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,16 @@ namespace TaskManagerUWP
         public MainPage()
         {
             this.InitializeComponent();
-            DataContext = new MainViewModel();
+            if (File.Exists(MainViewModel.PersistancePath))
+            {
+                DataContext = JsonConvert
+                    .DeserializeObject<MainViewModel>(File.ReadAllText(MainViewModel.PersistancePath), MainViewModel.Settings);
+
+            }
+            else
+            {
+                DataContext = new MainViewModel();
+            }
         }
 
         private async void AddNewTask_Click(object sender, RoutedEventArgs e)
@@ -54,9 +64,14 @@ namespace TaskManagerUWP
             await apptDialog.ShowAsync();
         }
 
-        private async void Search_Click(object sender, RoutedEventArgs e)
+        private void Search_Click(object sender, RoutedEventArgs e)
         {
-            await (DataContext as MainViewModel).Search();
+            (DataContext as MainViewModel).RefreshList();
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).SaveState();
         }
     }
 

@@ -6,23 +6,18 @@ namespace Task.Library.UWP.Models
     public class ToDo : ItemBase
     {
 
+        public ToDo()
+        {
+            Priority = 0;
+            Name = "";
+            Description = "";
+            Deadline = DateTime.Today;
+        }
 
         // { set; get;} automatically creates private fields , no need for declaring _deadline or _isCompleted
         public DateTime Deadline { get; set; }
         
 
-        public ToDo AddTask(string name, string desc, DateTime deadline, bool completed)
-        {
-            ToDo newTask = new ToDo();
-
-            newTask.Name = name;
-            newTask.Description = desc;
-            newTask.Deadline = deadline;
-            newTask.IsCompleted = completed;
-
-            return newTask; 
-
-        }
 
 
 
