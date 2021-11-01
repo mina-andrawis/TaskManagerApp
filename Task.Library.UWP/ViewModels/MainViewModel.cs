@@ -72,6 +72,17 @@ namespace Task.Library.UWP.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+
+        public void RemoveItem()
+        {
+            if (SelectedItem != null)
+            {
+                taskList.Remove(SelectedItem);
+            }
+        }
+
+
+
         public void SaveState()
         {
             var viewModelJson = JsonConvert.SerializeObject(this, Settings);

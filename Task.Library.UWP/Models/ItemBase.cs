@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Task.Library;
 
@@ -9,6 +11,8 @@ namespace Task.Library.UWP.Models
     {
         private static int currentId = 1;       //keep track of the amount of tasks
         private int _id = 0;       //check if id is new
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         // properties
         public int Id { get; set; }
@@ -33,18 +37,6 @@ namespace Task.Library.UWP.Models
             task.IsCompleted = true;
         }
 
-        public void DeleteItem(List<ItemBase> taskList, int position)
-        {
-            try
-            {
-                taskList.RemoveAt(position);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Console.WriteLine("The selection was not found. Returning to menu...\n");
-            }
-        }
-
         public void SetId()
         {
             if (Id > 0)
@@ -55,5 +47,9 @@ namespace Task.Library.UWP.Models
             Id = ++FakeDatabase.lastItemId;
         }
 
+        internal void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

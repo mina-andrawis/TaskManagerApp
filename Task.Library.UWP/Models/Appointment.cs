@@ -21,6 +21,8 @@ namespace Task.Library.UWP.Models
         public DateTime Stop { set; get; }
         public ObservableCollection<String> Attendees { set; get; }
 
+
+
         public override string ToString()
         {
             return $"[{Priority}] {Name}, {Description} \n"; // +

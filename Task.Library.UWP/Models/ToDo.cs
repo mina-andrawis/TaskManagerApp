@@ -12,13 +12,28 @@ namespace Task.Library.UWP.Models
             Name = "";
             Description = "";
             Deadline = DateTime.Today;
+            BoundDeadline = DateTime.Today;
         }
 
         // { set; get;} automatically creates private fields , no need for declaring _deadline or _isCompleted
         public DateTime Deadline { get; set; }
-        
 
 
+        public DateTimeOffset boundDeadline;
+
+        public DateTimeOffset BoundDeadline
+        {
+            get
+            {
+                return boundDeadline;
+            }
+            set
+            {
+                boundDeadline = value;
+                Deadline = boundDeadline.Date;
+                NotifyPropertyChanged("Deadline");
+            }
+        }
 
 
         public override string ToString()

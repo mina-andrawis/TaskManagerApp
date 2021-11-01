@@ -126,6 +126,7 @@
     <Compile Include="Models\ItemBase.cs" />
     <Compile Include="Models\ToDo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <EmbeddedResource Include="Properties\Task.Library.UWP.rd.xml" />
   </ItemGroup>
