@@ -27,21 +27,30 @@ namespace Task.Library.UWP.ViewModels
 
         private ObservableCollection<ItemBase> filteredItems { get; set; }
 
+        private bool isSortedAsc;
+
         public ObservableCollection<ItemBase> FilteredItems { 
         
             get
             {
                 if (string.IsNullOrWhiteSpace(Query))
                 {
-                    return taskList;
+                    return isSortedAsc
+                        ? new ObservableCollection<ItemBase>(taskList.OrderBy(t => t.Priority))
+                        : new ObservableCollection<ItemBase>(taskList.OrderByDescending(t => t.Priority));
                 }
-                else
-                {
-                    filteredItems = new ObservableCollection<ItemBase>(taskList
-                        .Where(s => s.Description.ToUpper().Contains(Query.ToUpper())
-                        || s.Name.ToUpper().Contains(Query.ToUpper())).ToList());
-                    return filteredItems;
-                }
+
+                return isSortedAsc
+                   ? new ObservableCollection<ItemBase>(
+                   taskList.Where(t => t.Name.ToUpper().Contains(Query.ToUpper())
+                   || t.Description.ToUpper().Contains(Query.ToUpper())
+                   || ((t is Appointment) && (t as Appointment).Attendees.Any(s => s.Contains(Query)))
+                   ).OrderBy(t => t.Priority))
+                   : new ObservableCollection<ItemBase>(
+                   taskList.Where(t => t.Name.ToUpper().Contains(Query.ToUpper())
+                   || t.Description.ToUpper().Contains(Query.ToUpper())
+                   || ((t is Appointment) && (t as Appointment).Attendees.Any(s => s.Contains(Query)))
+                   ).OrderByDescending(t => t.Priority));
             }
         
         }
@@ -79,6 +88,12 @@ namespace Task.Library.UWP.ViewModels
             {
                 taskList.Remove(SelectedItem);
             }
+        }
+
+        public void Sort()
+        {
+            isSortedAsc = !isSortedAsc;
+            RefreshList();
         }
 
 

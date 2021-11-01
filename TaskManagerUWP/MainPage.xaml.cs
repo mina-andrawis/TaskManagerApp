@@ -87,6 +87,11 @@ namespace TaskManagerUWP
         {
             (DataContext as MainViewModel).SaveState();
         }
+
+        private void Sort_Click(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).Sort();
+        }
     }
 
 }
