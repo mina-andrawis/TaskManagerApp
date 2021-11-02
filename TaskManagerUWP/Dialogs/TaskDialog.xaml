@@ -23,8 +23,10 @@
         <TextBox Grid.Row="0" Header="Title" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <TextBox Grid.Row="1" Header="Description" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <CheckBox Grid.Row="2" Grid.Column="0" Content="Complete" IsChecked="{Binding Path=IsCompleted, Mode=TwoWay}" Margin="0,12,0,0" VerticalAlignment="Top"></CheckBox>
-        <TextBox Grid.Row="2" Header="Priority" Text="{Binding Path=Priority, Mode=TwoWay}" Margin="107,12,0,77"/>
+        <TextBox Grid.Row="2" Header="Priority" Text="{Binding Path=Priority, Mode=TwoWay}" Margin="107,12,0,130"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Deadline" Margin="0,65,0,28"></TextBlock>
         <DatePicker Grid.Row="2" Date="{Binding Path=BoundDeadline, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,89,0,0" VerticalAlignment="Top"/>
+        <TimePicker Grid.Row="2" Time="{Binding Path=BoundDeadlineTime , Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,142,0,0" VerticalAlignment="Top"/>
+
     </Grid>
 </ContentDialog>

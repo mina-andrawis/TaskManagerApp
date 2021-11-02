@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.UI.Xaml.Controls;
 
 namespace Task.Library.UWP.Models
 {
@@ -13,6 +14,8 @@ namespace Task.Library.UWP.Models
             Description = "";
             Deadline = DateTime.Today;
             BoundDeadline = DateTime.Today;
+            BoundDeadlineTime = TimeSpan.Zero;
+
         }
 
         // { set; get;} automatically creates private fields , no need for declaring _deadline or _isCompleted
@@ -20,6 +23,15 @@ namespace Task.Library.UWP.Models
 
 
         public DateTimeOffset boundDeadline;
+
+        TimeSpan BoundDeadlineTime
+        {
+            get => Deadline.TimeOfDay;
+            set
+            {
+                Deadline = Deadline.AddTicks(value.Ticks);
+            }
+        }
 
         public DateTimeOffset BoundDeadline
         {
@@ -31,6 +43,7 @@ namespace Task.Library.UWP.Models
             {
                 boundDeadline = value;
                 Deadline = boundDeadline.Date;
+
                 NotifyPropertyChanged("Deadline");
             }
         }
@@ -38,7 +51,7 @@ namespace Task.Library.UWP.Models
 
         public override string ToString()
         {
-            return $"{Id}. {Name} || {Description} Due: {Deadline}";
+            return $"[{Priority}] {Name} || {Description} Due: {Deadline}";
         }
     }
 }

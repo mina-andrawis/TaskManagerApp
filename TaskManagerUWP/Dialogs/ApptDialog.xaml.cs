@@ -39,19 +39,22 @@ namespace TaskManagerUWP.Dialogs
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            var appt = DataContext as ItemBase;
-            var apptIsNew = appt.Id <= 0;
-            appt.SetId();
-            if (apptIsNew)
+            if (DataContext != null)
             {
-                Tasks.Add(appt);
-            }
-            else
-            {
-                var apptToEdit = Tasks.FirstOrDefault(t => t.Id == appt.Id);
-                var index = Tasks.IndexOf(apptToEdit);
-                Tasks.RemoveAt(index);
-                Tasks.Insert(index, appt);
+                var appt = DataContext as ItemBase;
+                var apptIsNew = appt.Id <= 0;
+                appt.SetId();
+                if (apptIsNew)
+                {
+                    Tasks.Add(appt);
+                }
+                else
+                {
+                    var apptToEdit = Tasks.FirstOrDefault(t => t.Id == appt.Id);
+                    var index = Tasks.IndexOf(apptToEdit);
+                    Tasks.RemoveAt(index);
+                    Tasks.Insert(index, appt);
+                }
             }
         }
 
