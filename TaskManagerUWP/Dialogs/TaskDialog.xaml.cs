@@ -6,7 +6,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Task.Library.UWP;
 using Task.Library.UWP.Models;
 using Task.Library.UWP.ViewModels;
-using ToDoApplication.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
