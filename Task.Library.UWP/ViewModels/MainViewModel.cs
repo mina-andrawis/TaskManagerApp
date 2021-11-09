@@ -16,9 +16,7 @@ namespace Task.Library.UWP.ViewModels
     public class MainViewModel : Page, INotifyPropertyChanged
     {
 
-
-
-        public static string PersistancePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\SaveData.json";
+        public static string PersistencePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\SaveData.json";
         public static JsonSerializerSettings Settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
         public ItemBase SelectedItem { get; set; }
@@ -28,11 +26,20 @@ namespace Task.Library.UWP.ViewModels
         private ObservableCollection<ItemBase> filteredItems { get; set; }
 
         private bool isSortedAsc;
+        private bool isSortedComplete;
 
         public ObservableCollection<ItemBase> FilteredItems { 
         
             get
             {
+                if (isSortedComplete)
+                {
+                     return isSortedComplete
+                        ? new ObservableCollection<ItemBase>(taskList.Where(t => t.IsCompleted))
+                        : new ObservableCollection<ItemBase>(taskList.OrderByDescending(t => t.Name));
+                }
+
+
                 if (string.IsNullOrWhiteSpace(Query))
                 {
                     return isSortedAsc
@@ -55,6 +62,20 @@ namespace Task.Library.UWP.ViewModels
         
         }
 
+        public ObservableCollection<ItemBase> CompletedItems
+        {
+
+            get
+            {
+                return isSortedComplete
+                    ? new ObservableCollection<ItemBase>(taskList.Where(t => t.IsCompleted))
+                    : new ObservableCollection<ItemBase>(taskList.OrderByDescending(t => t.Name));
+            }
+
+        }
+
+
+
         public string Query { get; set; }
 
 
@@ -73,6 +94,8 @@ namespace Task.Library.UWP.ViewModels
         public void RefreshList()
         {
             NotifyPropertyChanged("FilteredItems");
+            NotifyPropertyChanged("CompletedItems");
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -96,14 +119,17 @@ namespace Task.Library.UWP.ViewModels
             RefreshList();
         }
 
+        public void SortCompleted()
+        {
+            isSortedComplete = !isSortedComplete;
+            RefreshList();
+        }
+
 
 
         public void SaveState()
         {
-            var viewModelJson = JsonConvert.SerializeObject(this, Settings);
-            var hi = 1;
-            File.WriteAllText(PersistancePath, viewModelJson);      // inserts reference of MainViewModel 
-
+            File.WriteAllText(PersistencePath, JsonConvert.SerializeObject(this, Settings));
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Task.Library.UWP.Models
 
         public override string ToString()
         {
-            return $"[{Priority}] {Name} || {Description} Due: {Deadline}";
+            return $"[{ Priority}] {Name} || {Description} Due: {Deadline}";
         }
     }
 }

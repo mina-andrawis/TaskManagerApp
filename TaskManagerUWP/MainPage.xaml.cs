@@ -29,10 +29,10 @@ namespace TaskManagerUWP
         public MainPage()
         {
             this.InitializeComponent();
-            if (File.Exists(MainViewModel.PersistancePath))
+            if (File.Exists(MainViewModel.PersistencePath))
             {
                 DataContext = JsonConvert
-                    .DeserializeObject<MainViewModel>(File.ReadAllText(MainViewModel.PersistancePath), MainViewModel.Settings);
+                    .DeserializeObject<MainViewModel>(File.ReadAllText(MainViewModel.PersistencePath), MainViewModel.Settings);
 
             }
             else
@@ -92,6 +92,12 @@ namespace TaskManagerUWP
         {
             (DataContext as MainViewModel).Sort();
         }
+
+        private void Complete_Click(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).SortCompleted();
+        }
+        
     }
 
 }
