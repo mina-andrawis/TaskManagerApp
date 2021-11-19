@@ -110,6 +110,7 @@ namespace Task.Library.UWP.ViewModels
             if (SelectedItem != null)
             {
                 taskList.Remove(SelectedItem);
+                RefreshList();
             }
         }
 
