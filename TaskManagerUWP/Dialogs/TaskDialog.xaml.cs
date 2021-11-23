@@ -37,14 +37,18 @@ namespace TaskManagerUWP.Dialogs {
             this.Tasks = taskList;
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             var todo = DataContext as ItemBase;
             var todoIsNew = todo.Id <= 0;
             todo.SetId();
             if (todoIsNew)
             {
+
                 Tasks.Add(todo);
+
+                await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/ToDo/AddOrUpdate", todo);
+
             }
             else
             {

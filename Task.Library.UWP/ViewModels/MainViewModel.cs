@@ -109,6 +109,7 @@ namespace Task.Library.UWP.ViewModels
         {
             if (SelectedItem != null)
             {
+                //make a web call to delete this same item on the server
                 taskList.Remove(SelectedItem);
                 RefreshList();
             }
@@ -128,9 +129,9 @@ namespace Task.Library.UWP.ViewModels
 
 
 
-        public void SaveState()
+/*        public void SaveState()
         {
             File.WriteAllText(PersistencePath, JsonConvert.SerializeObject(this, Settings));
-        }
+        }*/
     }
 }

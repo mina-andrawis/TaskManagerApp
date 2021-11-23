@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Task.Library.UWP;
 using Task.Library.UWP.Models;
 using Task.Library.UWP.ViewModels;
 using Windows.Foundation;
@@ -37,7 +38,7 @@ namespace TaskManagerUWP.Dialogs
             this.Tasks = taskList;
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             if (DataContext != null)
             {
@@ -47,6 +48,9 @@ namespace TaskManagerUWP.Dialogs
                 if (apptIsNew)
                 {
                     Tasks.Add(appt);
+
+                    await new WebRequestHandler().Post("http://localhost:14102/Appointment/AddOrUpdate", appt);
+
                 }
                 else
                 {

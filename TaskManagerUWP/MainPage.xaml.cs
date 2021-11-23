@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Task.Library.UWP;
 using Task.Library.UWP.Models;
 using Task.Library.UWP.ViewModels;
 using TaskManagerUWP.Dialogs;
@@ -29,16 +30,18 @@ namespace TaskManagerUWP
         public MainPage()
         {
             this.InitializeComponent();
-            if (File.Exists(MainViewModel.PersistencePath))
-            {
-                DataContext = JsonConvert
-                    .DeserializeObject<MainViewModel>(File.ReadAllText(MainViewModel.PersistencePath), MainViewModel.Settings);
 
-            }
-            else
-            {
-                DataContext = new MainViewModel();
-            }
+            var mainViewModel = new MainViewModel();
+            var todoString = new WebRequestHandler().Get("http://localhost/Api.TaskManagerApp/ToDo").Result;
+            var todos = JsonConvert.DeserializeObject<List<ToDo>>(todoString);
+            todos.ForEach(t => mainViewModel.taskList.Add(t));
+            var appointmentsString = new WebRequestHandler().Get("http://localhost/Api.TaskManagerApp/Appointment").Result;
+            var appointments = JsonConvert.DeserializeObject<List<Appointment>>(appointmentsString);
+            appointments.ForEach(a => mainViewModel.taskList.Add(a));
+
+            DataContext = mainViewModel;
+            (DataContext as MainViewModel).RefreshList();
+
         }
 
         private async void AddNewTask_Click(object sender, RoutedEventArgs e)
@@ -83,10 +86,10 @@ namespace TaskManagerUWP
             (DataContext as MainViewModel).RefreshList();
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+/*        private void Save_Click(object sender, RoutedEventArgs e)
         {
             (DataContext as MainViewModel).SaveState();
-        }
+        }*/
 
         private void Sort_Click(object sender, RoutedEventArgs e)
         {
