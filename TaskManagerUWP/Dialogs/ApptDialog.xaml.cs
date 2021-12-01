@@ -55,7 +55,7 @@ namespace TaskManagerUWP.Dialogs
                     var apptToEdit = Tasks.FirstOrDefault(t => t._id == appt._id);
                     var index = Tasks.IndexOf(apptToEdit);
                     Tasks.RemoveAt(index);
-                    Tasks.Insert(index, appt);
+                    //Tasks.Insert(index, appt);
 
                     await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
 

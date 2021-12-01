@@ -41,7 +41,7 @@ namespace TaskManagerUWP.Dialogs {
         {
             var todo = DataContext as ItemBase;
             var todoIsNew = todo._id == null;
-            //todo.SetId();
+
             if (todoIsNew)
             {
 
