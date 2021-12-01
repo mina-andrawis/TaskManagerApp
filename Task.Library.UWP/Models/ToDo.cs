@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 
@@ -18,12 +19,30 @@ namespace Task.Library.UWP.Models
 
         }
 
-        // { set; get;} automatically creates private fields , no need for declaring _deadline or _isCompleted
-        public DateTime Deadline { get; set; }
+
+        [BsonElement("deadline")]
+        private DateTime deadline;
+
+        [BsonIgnore]
+        public DateTime Deadline
+        {
+            get
+            {
+                return deadline;
+            }
+            set
+            {
+                boundDeadline = value;
+
+                NotifyPropertyChanged();
+            }
+        }
 
 
+        [BsonIgnore]
         public DateTimeOffset boundDeadline;
 
+        [BsonIgnore]
         TimeSpan BoundDeadlineTime
         {
             get => Deadline.TimeOfDay;
@@ -33,6 +52,7 @@ namespace Task.Library.UWP.Models
             }
         }
 
+        [BsonIgnore]
         public DateTimeOffset BoundDeadline
         {
             get

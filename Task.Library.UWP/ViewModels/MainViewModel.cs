@@ -105,14 +105,27 @@ namespace Task.Library.UWP.ViewModels
         }
 
 
-        public void RemoveItem()
+        public async void RemoveItem()
         {
             if (SelectedItem != null)
             {
-                //make a web call to delete this same item on the server
+
+                if (SelectedItem is ToDo)
+                {
+                    await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/ToDo/Remove", SelectedItem);
+                }
+                else
+                {
+                    await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/Remove", SelectedItem);
+
+                }
+
                 taskList.Remove(SelectedItem);
-                RefreshList();
+
+
             }
+            RefreshList();
+
         }
 
         public void Sort()
@@ -126,12 +139,5 @@ namespace Task.Library.UWP.ViewModels
             isSortedComplete = !isSortedComplete;
             RefreshList();
         }
-
-
-
-/*        public void SaveState()
-        {
-            File.WriteAllText(PersistencePath, JsonConvert.SerializeObject(this, Settings));
-        }*/
     }
 }

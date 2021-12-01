@@ -33,11 +33,20 @@ namespace TaskManagerUWP
 
             var mainViewModel = new MainViewModel();
             var todoString = new WebRequestHandler().Get("http://localhost/Api.TaskManagerApp/ToDo").Result;
-            var todos = JsonConvert.DeserializeObject<List<ToDo>>(todoString);
-            todos.ForEach(t => mainViewModel.taskList.Add(t));
+            if (todoString != "")
+            {
+                var todos = JsonConvert.DeserializeObject<List<ToDo>>(todoString);
+                todos.ForEach(t => mainViewModel.taskList.Add(t));
+            }
+
             var appointmentsString = new WebRequestHandler().Get("http://localhost/Api.TaskManagerApp/Appointment").Result;
-            var appointments = JsonConvert.DeserializeObject<List<Appointment>>(appointmentsString);
-            appointments.ForEach(a => mainViewModel.taskList.Add(a));
+            if (appointmentsString != "")
+            {
+                var appointments = JsonConvert.DeserializeObject<List<Appointment>>(appointmentsString);
+                appointments.ForEach(a => mainViewModel.taskList.Add(a));
+
+            }
+
 
             DataContext = mainViewModel;
             (DataContext as MainViewModel).RefreshList();

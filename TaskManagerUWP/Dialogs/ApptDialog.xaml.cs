@@ -40,26 +40,26 @@ namespace TaskManagerUWP.Dialogs
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (DataContext != null)
-            {
                 var appt = DataContext as ItemBase;
-                var apptIsNew = appt.Id <= 0;
-                appt.SetId();
+                var apptIsNew = appt._id == null;
+
                 if (apptIsNew)
                 {
                     Tasks.Add(appt);
 
-                    await new WebRequestHandler().Post("http://localhost:14102/Appointment/AddOrUpdate", appt);
+                    await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
 
                 }
                 else
                 {
-                    var apptToEdit = Tasks.FirstOrDefault(t => t.Id == appt.Id);
+                    var apptToEdit = Tasks.FirstOrDefault(t => t._id == appt._id);
                     var index = Tasks.IndexOf(apptToEdit);
                     Tasks.RemoveAt(index);
                     Tasks.Insert(index, appt);
+
+                    await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
+
                 }
-            }
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

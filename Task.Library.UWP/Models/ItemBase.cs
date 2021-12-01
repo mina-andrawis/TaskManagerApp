@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,21 +11,68 @@ namespace Task.Library.UWP.Models
 {
     public class ItemBase
     {
-        private static int currentId = 1;       //keep track of the amount of tasks
-        private int _id = 0;       //check if id is new
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         // properties
-        public int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id
+        {
+            get; set;
+        }
 
+        [BsonElement("priority")]
         public int Priority { get; set; }
 
-        public string Name { get; set; }
+        [BsonElement("name")]
+        private string name;
 
-        public string Description { get; set; }
+        [BsonIgnore]
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public bool IsCompleted { get; set; }
+        [BsonElement("description")]
+        private string description;
+        [BsonIgnore]
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [BsonElement("isCompleted"), BsonRequired]
+        private bool isCompleted;
+
+        public bool IsCompleted {
+            get
+            {
+                return isCompleted;
+            }
+            set
+            {
+                isCompleted = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("Completed");
+            }
+        }
 
         public void SetPriority (ItemBase task, int priority)
         {
@@ -37,15 +86,6 @@ namespace Task.Library.UWP.Models
             task.IsCompleted = true;
         }
 
-        public void SetId()
-        {
-            if (Id > 0)
-            {
-                return;
-            }
-
-            Id = ++FakeDatabase.lastItemId;
-        }
 
         internal void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

@@ -40,8 +40,8 @@ namespace TaskManagerUWP.Dialogs {
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             var todo = DataContext as ItemBase;
-            var todoIsNew = todo.Id <= 0;
-            todo.SetId();
+            var todoIsNew = todo._id == null;
+            //todo.SetId();
             if (todoIsNew)
             {
 
@@ -52,10 +52,13 @@ namespace TaskManagerUWP.Dialogs {
             }
             else
             {
-                var apptToEdit = Tasks.FirstOrDefault(t => t.Id == todo.Id);
-                var index = Tasks.IndexOf(apptToEdit);
+                var toDoToEdit = Tasks.FirstOrDefault(t => t._id == todo._id);
+                var index = Tasks.IndexOf(toDoToEdit);
                 Tasks.RemoveAt(index);
                 Tasks.Insert(index, todo);
+
+                await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/ToDo/AddOrUpdate", todo);
+
             }
         }
         
