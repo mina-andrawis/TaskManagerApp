@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,19 +46,25 @@ namespace TaskManagerUWP.Dialogs
 
                 if (apptIsNew)
                 {
+                    var response = await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
+                    var apptFromServer = JsonConvert.DeserializeObject<ToDo>(response);
+                    appt._id = apptFromServer._id;
                     Tasks.Add(appt);
 
-                    await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
 
                 }
                 else
                 {
                     var apptToEdit = Tasks.FirstOrDefault(t => t._id == appt._id);
                     var index = Tasks.IndexOf(apptToEdit);
-                    Tasks.RemoveAt(index);
-                    //Tasks.Insert(index, appt);
 
-                    await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
+                    var response = await new WebRequestHandler().Post("http://localhost/Api.TaskManagerApp/Appointment/AddOrUpdate", appt);
+                    var apptFromServer = JsonConvert.DeserializeObject<ToDo>(response);
+                    appt._id = apptFromServer._id;
+
+                    Tasks.RemoveAt(index);
+                    Tasks.Insert(index, appt);
+
 
                 }
         }
